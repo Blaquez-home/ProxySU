@@ -1,10 +1,7 @@
 ﻿using Microsoft.Win32;
 using MvvmCross.Commands;
-using System;
-using System.Collections.Generic;
+using Newtonsoft.Json;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -30,6 +27,8 @@ namespace ProxySuper.Core.Models.Hosts
         public int Port { get; set; } = 22;
 
         public string PrivateKeyPath { get; set; }
+
+        public string PrivateKeyPassPhrase { get; set; }
 
         public LocalProxy Proxy { get; set; }
 

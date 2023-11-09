@@ -7,14 +7,18 @@ using ProxySuper.Core.Models.Projects;
 using ProxySuper.Core.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProxySuper.Core.ViewModels
 {
     public class BrookEditorViewModel : MvxViewModel<Record, Record>
     {
+        public BrookEditorViewModel(IMvxNavigationService navigationService)
+        {
+            NavigationService = navigationService;
+        }
+
+        public IMvxNavigationService NavigationService { get; }
+
         public string Id { get; set; }
 
         public Host Host { get; set; }
@@ -29,6 +33,7 @@ namespace ProxySuper.Core.ViewModels
                     BrookType.server.ToString(),
                     BrookType.wsserver.ToString(),
                     BrookType.wssserver.ToString(),
+                    BrookType.socks5.ToString(),
                 };
             }
         }
@@ -42,8 +47,15 @@ namespace ProxySuper.Core.ViewModels
             set
             {
                 Settings.BrookType = (BrookType)Enum.Parse(typeof(BrookType), value);
+
+                if (Settings.BrookType == BrookType.wssserver)
+                {
+                    Settings.Port = 443;
+                    RaisePropertyChanged("Settings");
+                }
                 RaisePropertyChanged("EnablePort");
                 RaisePropertyChanged("EnableDomain");
+                RaisePropertyChanged("EnableIP");
             }
         }
 
@@ -51,9 +63,11 @@ namespace ProxySuper.Core.ViewModels
 
         public bool EnableDomain => Settings.BrookType == BrookType.wssserver;
 
+        public bool EnableIP => Settings.BrookType != BrookType.wssserver;
+
         public IMvxCommand SaveCommand => new MvxCommand(() => Save());
 
-        public IMvxNavigationService NavigationService { get; }
+        public IMvxCommand SaveAndInstallCommand => new MvxCommand(SaveAndInstall);
 
         public override void Prepare(Record parameter)
         {
@@ -71,6 +85,18 @@ namespace ProxySuper.Core.ViewModels
                 Host = Host,
                 BrookSettings = Settings,
             });
+        }
+
+        private void SaveAndInstall()
+        {
+            var record = new Record
+            {
+                Id = this.Id,
+                Host = this.Host,
+                BrookSettings = Settings,
+            };
+            NavigationService.Close(this, record);
+            NavigationService.Navigate<BrookInstallViewModel, Record>(record);
         }
     }
 }

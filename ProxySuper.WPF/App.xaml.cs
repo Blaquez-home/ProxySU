@@ -1,13 +1,6 @@
-﻿using MvvmCross.Platforms.Wpf.Views;
+﻿using MvvmCross.Core;
 using MvvmCross.Platforms.Wpf.Core;
-using MvvmCross.Core;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+using MvvmCross.Platforms.Wpf.Views;
 
 namespace ProxySuper.WPF
 {
@@ -18,7 +11,7 @@ namespace ProxySuper.WPF
     {
         protected override void RegisterSetup()
         {
-            this.RegisterSetupType<MvxWpfSetup<Core.App>>();
+            this.RegisterSetupType<Setup>();
         }
     }
 }

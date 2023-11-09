@@ -1,19 +1,19 @@
 ﻿using MvvmCross;
 using MvvmCross.Navigation;
+using MvvmCross.Platforms.Wpf.Presenters.Attributes;
 using MvvmCross.Platforms.Wpf.Views;
+using MvvmCross.ViewModels;
 using ProxySuper.Core.Models;
 using ProxySuper.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 
 namespace ProxySuper.WPF.Views
 {
-    /// <summary>
-    /// HomeView.xaml 的交互逻辑
-    /// </summary>
+    [MvxContentPresentation]
+    [MvxViewFor(typeof(HomeViewModel))]
     public partial class HomeView : MvxWpfView
     {
 
@@ -69,7 +69,11 @@ namespace ProxySuper.WPF.Views
             resource.Source = new Uri(@"Resources\Languages\zh_cn.xaml", UriKind.Relative);
             Application.Current.Resources.MergedDictionaries[0] = resource;
         }
-
+        private void SetIrFA(object sender, RoutedEventArgs e)
+        {
+            resource.Source = new Uri(@"Resources\Languages\fa_IR.xaml", UriKind.Relative);
+            Application.Current.Resources.MergedDictionaries[0] = resource;
+        }
         private void SetEnglish(object sender, RoutedEventArgs e)
         {
             resource.Source = new Uri(@"Resources\Languages\en.xaml", UriKind.Relative);
@@ -96,6 +100,10 @@ namespace ProxySuper.WPF.Views
             NavigationService.Navigate<ShareLinkViewModel, List<Record>>(checkedRecords);
         }
 
+        private void GetRoot(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate<EnableRootViewModel>();
+        }
 
     }
 }

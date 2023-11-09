@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:ProxySuper.WPF.Controls"
              xmlns:convert="clr-namespace:ProxySuper.Core.Converters;assembly=ProxySuper.Core"
              xmlns:host="clr-namespace:ProxySuper.Core.Models.Hosts;assembly=ProxySuper.Core"
+             xmlns:ssh="clr-namespace:Renci.SshNet;assembly=Renci.SshNet"
              mc:Ignorable="d">
 
 
@@ -16,8 +17,8 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="330" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         
         <GroupBox Padding="10" Header="{DynamicResource HostGroupName}" Grid.Row="0">
@@ -28,6 +29,7 @@
                     </Style>
                 </Grid.Resources>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="36" />
                     <RowDefinition Height="36" />
                     <RowDefinition Height="36" />
                     <RowDefinition Height="36" />
@@ -104,7 +106,18 @@
                             Converter={StaticResource SecretTypeConverter},
                             ConverterParameter={x:Static host:LoginSecretType.PrivateKey}
                         }"
-                        Content="{DynamicResource HostUploadSecretKey}" /> 
+                        Content="{DynamicResource HostUploadSecretKey}" />
+
+                <Label Content="{DynamicResource HostSertTypePrivateKeyPassPhrase}" Grid.Row="7" Grid.Column="0" />
+                <TextBox Grid.Row="7" Grid.Column="1"
+                         Width="170"
+                         Text="{Binding Host.PrivateKeyPassPhrase}"
+                         IsEnabled="{
+                            Binding Host.SecretType,
+                            Converter={StaticResource SecretTypeConverter},
+                            ConverterParameter={x:Static host:LoginSecretType.PrivateKey}
+                        }"
+                         VerticalContentAlignment="Center" />
             </Grid>
         </GroupBox>
 
@@ -129,21 +142,21 @@
                                  IsChecked="{
                                     Binding Host.Proxy.Type,
                                     Converter={StaticResource ProxyTypeConverter},
-                                    ConverterParameter={x:Static host:LocalProxyType.None}
+                                    ConverterParameter={x:Static ssh:ProxyTypes.None}
                                  }"/>
                     <RadioButton Content="{DynamicResource ProxyTypeHttp}"
                                  Margin="5,0"
                                  IsChecked="{
                                     Binding Host.Proxy.Type,
                                     Converter={StaticResource ProxyTypeConverter},
-                                    ConverterParameter={x:Static host:LocalProxyType.Http}
+                                    ConverterParameter={x:Static ssh:ProxyTypes.Http}
                                  }"/>
                     <RadioButton Content="{DynamicResource ProxyTypeSocks5}"
                                  Margin="5,0"
                                  IsChecked="{
                                     Binding Host.Proxy.Type,
                                     Converter={StaticResource ProxyTypeConverter},
-                                    ConverterParameter={x:Static host:LocalProxyType.Socks5}
+                                    ConverterParameter={x:Static ssh:ProxyTypes.Socks5}
                                  }"/>
                 </StackPanel>
 
